@@ -69,17 +69,17 @@ namespace Perceptomancer
             return err;
         }
 
-        private void ApplyBackPropagation(List<double[]> input, List<double[]> desiredOutput, double alpha)
+        private void ApplyBackPropagation(List<double[]> input, List<double[]> desiredOutput, double learningRate)
         {
             SetDeltas();
             for (int i = 0; i < input.Count; i++)
             {
                 Feed(input[i]);
                 SetSigmas(desiredOutput[i]);
-                UpdateBias(alpha);
+                UpdateBias(learningRate);
                 AddDelta();
             }
-            UpdateWeights(alpha);
+            UpdateWeights(learningRate);
 
         }
 
@@ -121,13 +121,13 @@ namespace Perceptomancer
             }
         }
 
-        private void UpdateBias(double alpha)
+        private void UpdateBias(double learningRate)
         {
             for (int i = 0; i < _layers.Count; i++)
             {
                 for (int j = 0; j < _layers[i].NumberOfNeurons; j++)
                 {
-                    _layers[i].Neurons[j].Bias -= alpha * sigmas[i][j];
+                    _layers[i].Neurons[j].Bias -= learningRate * sigmas[i][j];
                 }
             }
         }
@@ -146,7 +146,7 @@ namespace Perceptomancer
             }
         }
 
-        void UpdateWeights(double alpha)
+        void UpdateWeights(double learningRate)
         {
             for (int i = 0; i < _layers.Count; i++)
             {
@@ -154,7 +154,7 @@ namespace Perceptomancer
                 {
                     for (int k = 0; k < _layers[i].Neurons[j].Weights.Length; k++)
                     {
-                        _layers[i].Neurons[j].Weights[k] -= alpha * deltas[i][j, k];
+                        _layers[i].Neurons[j].Weights[k] -= learningRate * deltas[i][j, k];
                     }
                 }
             }
