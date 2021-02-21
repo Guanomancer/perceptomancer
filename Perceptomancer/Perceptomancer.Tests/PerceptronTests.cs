@@ -22,11 +22,7 @@ namespace Perceptomancer.Tests
             var perceptron = new Perceptron(netDefinition);
             var set = TraningSet.XorList();
 
-            if (!perceptron.Learn(set.InputList, set.OutputList, learningRate, maxError, maxIterations, null, 10000))
-            {
-                Debug.WriteLine("Failed to train net.");
-                return;
-            }
+            Assert.IsTrue(perceptron.Learn(set.InputList, set.OutputList, learningRate, maxError, maxIterations, null, 10000));
 
             var result = new double[4];
 

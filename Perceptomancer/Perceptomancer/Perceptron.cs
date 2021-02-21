@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -55,7 +56,7 @@ namespace Perceptomancer
             double err = 99999;
             log = new List<string>();
             int it = maxIterations;
-            while (err > maxError)
+            while (true)
             {
                 ApplyBackPropagation(input, desiredOutput, alpha);
                 err = GeneralError(input, desiredOutput);
@@ -63,7 +64,7 @@ namespace Perceptomancer
 
                 if ((it - maxIterations) % 1000 == 0)
                 {
-                    Console.WriteLine(err + " iterations: " + (it - maxIterations));
+                    Debug.WriteLine(err + " iterations: " + (it - maxIterations));
                 }
 
 
@@ -72,7 +73,7 @@ namespace Perceptomancer
                     if ((it - maxIterations) % iter_save == 0)
                     {
                         save_net(net_path);
-                        Console.WriteLine("Save net to " + net_path);
+                        Debug.WriteLine("Save net to " + net_path);
                     }
                 }
 
@@ -87,14 +88,21 @@ namespace Perceptomancer
 
                 if (maxIterations <= 0)
                 {
-                    Console.WriteLine("MINIMO LOCAL");
+                    Debug.WriteLine(err + " iterations: " + (it - maxIterations));
+                    //Console.WriteLine("MINIMO LOCAL");
                     System.IO.File.WriteAllLines(@"LogTail.txt", log.ToArray());
                     return false;
                 }
 
+                if(err <= maxError)
+                {
+                    Debug.WriteLine(err + " iterations: " + (it - maxIterations));
+                    return true;
+                }
             }
 
             System.IO.File.WriteAllLines(@"LogTail.txt", log.ToArray());
+            //Debug.WriteLine(string.Join("\n", log.ToArray()));
             return true;
         }
 
