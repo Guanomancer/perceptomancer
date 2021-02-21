@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeepNet_Tests.cs" />
     <Compile Include="PerceptronTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
