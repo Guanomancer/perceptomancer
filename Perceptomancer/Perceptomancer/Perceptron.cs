@@ -105,9 +105,9 @@ namespace Perceptomancer
                 }
             }
 
-            System.IO.File.WriteAllLines(@"LogTail.txt", log.ToArray());
-            //Debug.WriteLine(string.Join("\n", log.ToArray()));
-            return true;
+            //System.IO.File.WriteAllLines(@"LogTail.txt", log.ToArray());
+            ////Debug.WriteLine(string.Join("\n", log.ToArray()));
+            //return true;
         }
 
         List<double[]> sigmas;
