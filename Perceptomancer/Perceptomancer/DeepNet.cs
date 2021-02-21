@@ -10,7 +10,7 @@ namespace Perceptomancer
     [Serializable]
     public class DeepNet
     {
-        private List<DeepLayer> _layers = new List<DeepLayer>();
+        private readonly List<DeepLayer> _layers = new List<DeepLayer>();
 
         private List<double[]> sigmas;
         private List<double[,]> deltas;
@@ -90,14 +90,14 @@ namespace Perceptomancer
             {
                 sigmas.Add(new double[_layers[i].NumberOfNeurons]);
             }
-            for (int i = _layers.Count - 1; i >= 0; i--)
+            for (int i = _layers.Count - 1; i >= 1; i--)
             {
                 for (int j = 0; j < _layers[i].NumberOfNeurons; j++)
                 {
                     if (i == _layers.Count - 1)
                     {
                         double y = _layers[i].Neurons[j].LastActivation;
-                        sigmas[i][j] = (Neuron.Sigmoid(y) - desiredOutput[j]) * Neuron.SigmoidDerivated(y);
+                        sigmas[i][j] = (_layers[i].ActivationFunction.Activate(y) - desiredOutput[j]) * _layers[i].ActivationFunction.Derive(y);
                     }
                     else
                     {
@@ -106,7 +106,7 @@ namespace Perceptomancer
                         {
                             sum += _layers[i + 1].Neurons[k].Weights[j] * sigmas[i + 1][k];
                         }
-                        sigmas[i][j] = Neuron.SigmoidDerivated(_layers[i].Neurons[j].LastActivation) * sum;
+                        sigmas[i][j] = _layers[i].ActivationFunction.Derive(_layers[i].Neurons[j].LastActivation) * sum;
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace Perceptomancer
                 {
                     for (int k = 0; k < _layers[i].Neurons[j].Weights.Length; k++)
                     {
-                        deltas[i][j, k] += sigmas[i][j] * Neuron.Sigmoid(_layers[i - 1].Neurons[k].LastActivation);
+                        deltas[i][j, k] += sigmas[i][j] * _layers[i].ActivationFunction.Activate(_layers[i - 1].Neurons[k].LastActivation);
                     }
                 }
             }

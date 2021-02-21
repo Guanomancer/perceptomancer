@@ -12,12 +12,6 @@ namespace Perceptomancer.Tests
     public class DeepNet_Tests
     {
         [Test]
-        public void Ctor_DoesNotFail()
-        {
-            var net = new DeepNet();
-        }
-
-        [Test]
         public void AddLayer_AddsLayerWithCorrentNumberOfInputs()
         {
             var net = new DeepNet();
