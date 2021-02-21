@@ -45,7 +45,7 @@ namespace Perceptomancer.Tests
         {
             var net = new DeepNet();
             net.AddLayer(new InputLayer(2));
-            net.AddLayer(new FullyConnectedLayer(1));
+            net.AddLayer(new FullyConnectedLayer(1, SigmoidActivationFunction.Default));
             var result = net.Feed(new double[] { 0.75, 0.25 });
 
             Assert.AreNotEqual(0.75, result);
@@ -57,13 +57,16 @@ namespace Perceptomancer.Tests
             var traningSets = TraningSet.Xor();
             var net = new DeepNet();
             net.AddLayer(new InputLayer(2));
-            net.AddLayer(new FullyConnectedLayer(3));
-            net.AddLayer(new FullyConnectedLayer(3));
-            net.AddLayer(new FullyConnectedLayer(1));
+            net.AddLayer(new FullyConnectedLayer(5, SigmoidActivationFunction.Default));
+            net.AddLayer(new FullyConnectedLayer(1, SigmoidActivationFunction.Default));
 
-            var success = net.Train(traningSets, 0.3, 0.01, 10000);
-
-            Assert.IsTrue(success);
+            bool success = false;
+            int attempts = 10;
+            while (!success)
+            {
+                Assert.IsTrue(attempts-- > 0);
+                success = net.Train(traningSets, 0.3, 0.01, 50000);
+            }
 
             var result = new double[4];
 
@@ -93,11 +96,16 @@ namespace Perceptomancer.Tests
             var traningSets = TraningSet.XorInverse();
             var net = new DeepNet();
             net.AddLayer(new InputLayer(2));
-            net.AddLayer(new FullyConnectedLayer(3));
-            net.AddLayer(new FullyConnectedLayer(3));
-            net.AddLayer(new FullyConnectedLayer(1));
+            net.AddLayer(new FullyConnectedLayer(5, SigmoidActivationFunction.Default));
+            net.AddLayer(new FullyConnectedLayer(1, SigmoidActivationFunction.Default));
 
-            var success = net.Train(traningSets, 0.3, 0.01, 100000);
+            bool success = false;
+            int attempts = 10;
+            while (!success)
+            {
+                Assert.IsTrue(attempts-- > 0);
+                success = net.Train(traningSets, 0.3, 0.01, 50000);
+            }
 
             Assert.IsTrue(success);
 

@@ -12,7 +12,6 @@ namespace Perceptomancer
     {
         private List<DeepLayer> _layers = new List<DeepLayer>();
 
-
         private List<double[]> sigmas;
         private List<double[,]> deltas;
 
@@ -97,7 +96,7 @@ namespace Perceptomancer
                 {
                     if (i == _layers.Count - 1)
                     {
-                        double y = _layers[i].Neurons[j].lastActivation;
+                        double y = _layers[i].Neurons[j].LastActivation;
                         sigmas[i][j] = (Neuron.Sigmoid(y) - desiredOutput[j]) * Neuron.SigmoidDerivated(y);
                     }
                     else
@@ -105,9 +104,9 @@ namespace Perceptomancer
                         double sum = 0;
                         for (int k = 0; k < _layers[i + 1].NumberOfNeurons; k++)
                         {
-                            sum += _layers[i + 1].Neurons[k].weights[j] * sigmas[i + 1][k];
+                            sum += _layers[i + 1].Neurons[k].Weights[j] * sigmas[i + 1][k];
                         }
-                        sigmas[i][j] = Neuron.SigmoidDerivated(_layers[i].Neurons[j].lastActivation) * sum;
+                        sigmas[i][j] = Neuron.SigmoidDerivated(_layers[i].Neurons[j].LastActivation) * sum;
                     }
                 }
             }
@@ -118,7 +117,7 @@ namespace Perceptomancer
             deltas = new List<double[,]>();
             for (int i = 0; i < _layers.Count; i++)
             {
-                deltas.Add(new double[_layers[i].NumberOfNeurons, _layers[i].Neurons[0].weights.Length]);
+                deltas.Add(new double[_layers[i].NumberOfNeurons, _layers[i].Neurons[0].Weights.Length]);
             }
         }
 
@@ -128,7 +127,7 @@ namespace Perceptomancer
             {
                 for (int j = 0; j < _layers[i].NumberOfNeurons; j++)
                 {
-                    _layers[i].Neurons[j].bias -= alpha * sigmas[i][j];
+                    _layers[i].Neurons[j].Bias -= alpha * sigmas[i][j];
                 }
             }
         }
@@ -139,9 +138,9 @@ namespace Perceptomancer
             {
                 for (int j = 0; j < _layers[i].NumberOfNeurons; j++)
                 {
-                    for (int k = 0; k < _layers[i].Neurons[j].weights.Length; k++)
+                    for (int k = 0; k < _layers[i].Neurons[j].Weights.Length; k++)
                     {
-                        deltas[i][j, k] += sigmas[i][j] * Neuron.Sigmoid(_layers[i - 1].Neurons[k].lastActivation);
+                        deltas[i][j, k] += sigmas[i][j] * Neuron.Sigmoid(_layers[i - 1].Neurons[k].LastActivation);
                     }
                 }
             }
@@ -153,9 +152,9 @@ namespace Perceptomancer
             {
                 for (int j = 0; j < _layers[i].NumberOfNeurons; j++)
                 {
-                    for (int k = 0; k < _layers[i].Neurons[j].weights.Length; k++)
+                    for (int k = 0; k < _layers[i].Neurons[j].Weights.Length; k++)
                     {
-                        _layers[i].Neurons[j].weights[k] -= alpha * deltas[i][j, k];
+                        _layers[i].Neurons[j].Weights[k] -= alpha * deltas[i][j, k];
                     }
                 }
             }

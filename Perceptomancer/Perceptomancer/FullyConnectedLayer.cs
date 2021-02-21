@@ -4,10 +4,8 @@ namespace Perceptomancer
 {
     public class FullyConnectedLayer : DeepLayer
     {
-        private static Random _rng = new Random(1);
-
-        public FullyConnectedLayer(int numberOfNeurons)
-            : base(numberOfNeurons)
+        public FullyConnectedLayer(int numberOfNeurons, IActivationFunction activationFunction)
+            : base(numberOfNeurons, activationFunction)
         { }
 
         public override void Attach(DeepLayer previousLayer = null)
@@ -17,7 +15,7 @@ namespace Perceptomancer
 
             NumberOfInputs = previousLayer.NumberOfNeurons;
             for (int i = 0; i < NumberOfNeurons; i++)
-                Neurons.Add(new Neuron(NumberOfInputs, _rng));
+                Neurons.Add(new DeepNeuron(NumberOfInputs, ActivationFunction, RandomNumberGenerator));
         }
 
         public override double[] Feed(double[] inputValues)
